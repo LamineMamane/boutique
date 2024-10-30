@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Stock et Ventes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        #sidebar {
+            width: 200px;
+            background-color: #0f3460;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar ul li {
+            margin: 20px 0;
+        }
+
+        #sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        #sidebar ul li a:hover {
+            background-color: #3b4a69;
+        }
+
+        #main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0f3460;
+            color: white;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        input, select {
+            padding: 10px;
+            margin-top: 5px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        .btn-supprimer {
+            background-color: #e74c3c;
+        }
+
+        .btn-supprimer:hover {
+            background-color: #c0392b;
+        }
+
+        .product-entry {
+            margin-bottom: 15px;
+        }
+
+        .date-selector {
+            margin-top: 20px;
+        }
+
+        .total-jour {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Style pour le tableau de bord */
+.dashboard-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    flex: 1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+    font-size: 1.4em;
+    color: #0f3460;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1.8em;
+    color: #3498db;
+    font-weight: bold;
+    margin: 0;
+}
+
+.card:nth-child(2) p {
+    color: #2ecc71; /* Ventes en vert */
+}
+
+.card:nth-child(3) p {
+    color: #e74c3c; /* Produits en faible quantité en rouge */
+}
+
+/* Animation d'entrée en fondu pour les cartes */
+.card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f6f9;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #login-form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        #login-form h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #login-form label {
+            font-weight: 500;
+            margin-top: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        #login-form input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #login-form button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        #login-form button:hover {
+            background-color: #2980b9;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>  <!-- Formulaire de Connexion -->
+    <div id="login-page" class="login-container">
+        <h2>Connexion</h2>
+        <form id="login-form">
+            <label for="username">Identifiant :</label>
+            <input type="text" id="username" required placeholder="Entrez votre identifiant">
+
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" required placeholder="Entrez votre mot de passe">
+
+            <button type="submit">Se connecter</button>
+            <p id="login-error" class="error-message"></p>
+        </form>
+    </div>
+    <div id="main-content" style="display: none;"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <ul>
+            <li><a href="#" onclick="logout()">Déconnexion</a></li>
+            <li><a href="#" onclick="afficherSection('dashboard')">Tableau de Bord</a></li>
+            <li><a href="#" onclick="afficherSection('ajouter-produit')">Produit</a></li>
+            <li><a href="#" onclick="afficherSection('enregistrer-vente')">Vente</a></li>
+            <li><a href="#" onclick="afficherSection('liste-ventes')">Liste des Ventes</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenu Principal -->
+    <div id="main-content">
+        <!-- Tableau de Bord -->
+        <div id="dashboard" class="section visible">
+            <h1>Tableau de Bord</h1>
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Total Produits</h3>
+                    <p id="total-produits">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Ventes</h3>
+                    <p id="total-ventes">0 CFA</p>
+                </div>
+                <div class="card">
+                    <h3>Produits en Faible Quantité</h3>
+                    <p id="produits-faible">0</p>
+                </div>
+            </div>
+            <table id="stock-table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                        <th>Total Valeur</th>
+                        <th>Réduction</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Ajouter un Produit -->
+        <div id="ajouter-produit" class="section">
+            <h2>Ajouter un Produit</h2>
+            <form id="form-produit">
+                <label for="nom-produit">Nom du Produit :</label>
+                <input type="text" id="nom-produit" required>
+                
+                <label for="quantite">Quantité :</label>
+                <input type="number" id="quantite" required>
+                
+                <label for="prix">Prix Unitaire :</label>
+                <input type="number" id="prix" step="0.01" required>
+                
+                <label for="pourcentage">Réduction (%) :</label>
+                <input type="number" id="pourcentage" step="0.01" required>
+                
+                <button type="submit">Enregistrer</button>
+            </form>
+        </div>
+
+        <!-- Enregistrer une Vente -->
+        <div id="enregistrer-vente" class="section">
+            <h2>Enregistrer une Vente</h2>
+            <div id="product-list">
+                <div class="product-entry">
+                    <label for="produit-vente-0">Sélectionner un Produit :</label>
+                    <select id="produit-vente-0" class="produit-vente" required></select>
+                    
+                    <label for="quantite-vente-0">Quantité Vendue :</label>
+                    <input type="number" id="quantite-vente-0" class="quantite-vente" required>
+                </div>
+            </div>
+            <button id="add-product-btn">Ajouter un autre produit</button>
+            <button type="submit" id="submit-vente-btn">Enregistrer Vente</button>
+            <p id="total-vente">Total Vente : 0 CFA</p>
+        </div>
+
+        <!-- Liste des Ventes -->
+        <div id="liste-ventes" class="section">
+            <h2>Liste des Ventes</h2>
+            <table id="vente-table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité Vendue</th>
+                        <th>Prix Total</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="date-selector">
+                <label for="date-jour">Sélectionner la date :</label>
+                <input type="date" id="date-jour" required>
+                <button onclick="calculerTotalJour()">Voir Total du Jour</button>
+            </div>
+
+            <p id="total-jour" class="total-jour">Total du jour : 0 CFA</p>
+        </div>
+    </div>
+
+    <script>
+        let stocks = JSON.parse(localStorage.getItem('stocks')) || [];
+        let ventes = JSON.parse(localStorage.getItem('ventes')) || [];
+        let totalVentes = parseFloat(localStorage.getItem('totalVentes')) || 0;
+        let produitIndex = 1;
+
+        // Afficher la section sélectionnée
+        function afficherSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('visible');
+            });
+            document.getElementById(sectionId).classList.add('visible');
+        }
+
+        // Afficher les stocks dans le tableau
+        function afficherStocks() {
+            const tbody = document.querySelector('#stock-table tbody');
+            tbody.innerHTML = '';
+
+
+
+            function updateDashboardCards() {
+            document.getElementById('total-produits').textContent = stocks.length;
+
+            const totalVentes = ventes.reduce((acc, vente) => acc + (vente.quantiteVendue * vente.prix), 0);
+            document.getElementById('total-ventes').textContent = `${totalVentes.toFixed(2)} CFA`;
+
+            const produitsFaibleQuantite = stocks.filter(stock => stock.quantite < 5).length;
+            document.getElementById('produits-faible').textContent = produitsFaibleQuantite;
+        }
+
+            stocks.forEach((stock, index) => {
+                const totalValeur = (stock.quantite * stock.prix).toFixed(2);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stock.produit}</td>
+                    <td>${stock.quantite}</td>
+                    <td>${stock.prix.toFixed(2)} CFA</td>
+                    <td>${totalValeur} CFA</td>
+                    <td>${stock.pourcentage.toFixed(2)}%</td>
+                    <td>
+                        <button onclick="supprimerProduit(${index})" class="btn-supprimer">Supprimer</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Afficher les ventes dans le tableau
+        function afficherVentes() {
+            const tbody = document.querySelector('#vente-table tbody');
+            tbody.innerHTML = '';
+
+            ventes.forEach((vente, index) => {
+                const totalPrix = (vente.quantiteVendue * vente.prix).toFixed(2);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${vente.produit}</td>
+                    <td>${vente.quantiteVendue}</td>
+                    <td>${totalPrix} CFA</td>
+                    <td>${vente.date}</td>
+                    <td>
+                        <button onclick="supprimerVente(${index})" class="btn-supprimer">Supprimer</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Ajouter un produit
+        document.getElementById('form-produit').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const produit = document.getElementById('nom-produit').value;
+            const quantite = parseInt(document.getElementById('quantite').value);
+            const prix = parseFloat(document.getElementById('prix').value);
+            const pourcentage = parseFloat(document.getElementById('pourcentage').value);
+
+            stocks.push({ produit, quantite, prix, pourcentage });
+            saveToLocalStorage();
+            afficherStocks();
+            this.reset();
+        });
+
+        // Enregistrer une vente et mettre à jour le total
+        document.getElementById('submit-vente-btn').addEventListener('click', function() {
+            const produitVentes = document.querySelectorAll('.produit-vente');
+            const quantiteVentes = document.querySelectorAll('.quantite-vente');
+            const dateVente = new Date().toISOString().split('T')[0]; // Date actuelle (au format YYYY-MM-DD)
+
+            let totalVenteCourante = 0; // Variable pour calculer le total de cette vente
+
+            produitVentes.forEach((produitVente, index) => {
+                const produit = produitVente.value;
+                const quantiteVendue = parseInt(quantiteVentes[index].value);
+
+                const stockProduit = stocks.find(stock => stock.produit === produit);
+                if (stockProduit && stockProduit.quantite >= quantiteVendue) {
+                    const prix = stockProduit.prix;
+                    ventes.push({ produit, quantiteVendue, prix, date: dateVente });
+                    stockProduit.quantite -= quantiteVendue; // Met à jour la quantité en stock
+                    totalVentes += quantiteVendue * prix; // Met à jour le total des ventes
+                    totalVenteCourante += quantiteVendue * prix; // Met à jour le total pour cette vente
+                }
+            });
+
+            // Afficher le nouveau total des ventes
+            document.getElementById('total-vente').textContent = `Total Vente : ${totalVenteCourante.toFixed(2)} CFA`;
+
+            saveToLocalStorage();
+            afficherStocks();
+            afficherVentes();
+        });
+
+        // Ajouter un autre produit dans le formulaire de vente
+        document.getElementById('add-product-btn').addEventListener('click', function() {
+            const productEntry = document.createElement('div');
+            productEntry.classList.add('product-entry');
+            productEntry.innerHTML = `
+                <label for="produit-vente-${produitIndex}">Sélectionner un Produit :</label>
+                <select id="produit-vente-${produitIndex}" class="produit-vente" required></select>
+
+                <label for="quantite-vente-${produitIndex}">Quantité Vendue :</label>
+                <input type="number" id="quantite-vente-${produitIndex}" class="quantite-vente" required>
+            `;
+
+            document.getElementById('product-list').appendChild(productEntry);
+            remplirOptionsProduits(`produit-vente-${produitIndex}`);
+            produitIndex++;
+        });
+
+        // Remplir les options de produits dans les sélections
+        function remplirOptionsProduits(selectId) {
+            const selectElement = document.getElementById(selectId);
+            selectElement.innerHTML = '';
+
+            stocks.forEach(stock => {
+                const option = document.createElement('option');
+                option.value = stock.produit;
+                option.textContent = stock.produit;
+                selectElement.appendChild(option);
+            });
+        }
+
+        // Calculer le total des ventes pour une date sélectionnée
+        function calculerTotalJour() {
+            const dateSelectionnee = document.getElementById('date-jour').value;
+            const totalDuJour = ventes
+                .filter(vente => vente.date === dateSelectionnee)
+                .reduce((total, vente) => total + vente.quantiteVendue * vente.prix, 0);
+
+            document.getElementById('total-jour').textContent = `Total du jour : ${totalDuJour.toFixed(2)} CFA`;
+        }
+
+        // Supprimer un produit
+        function supprimerProduit(index) {
+            stocks.splice(index, 1);
+            saveToLocalStorage();
+            afficherStocks();
+        }
+
+        // Supprimer une vente et restaurer les quantités en stock
+        function supprimerVente(index) {
+            const vente = ventes[index];
+            const stockProduit = stocks.find(stock => stock.produit === vente.produit);
+            
+            if (stockProduit) {
+                stockProduit.quantite += vente.quantiteVendue; // Restaurer la quantité vendue au stock
+            }
+
+            ventes.splice(index, 1); // Supprimer la vente de la liste
+            saveToLocalStorage(); // Sauvegarder les modifications
+            afficherVentes(); // Mettre à jour l'affichage des ventes
+            afficherStocks(); // Mettre à jour l'affichage des stocks
+        }
+
+        // Sauvegarder dans le LocalStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('stocks', JSON.stringify(stocks));
+            localStorage.setItem('ventes', JSON.stringify(ventes));
+            localStorage.setItem('totalVentes', totalVentes);
+        }
+
+        // Initialiser la page
+        window.onload = function() {
+            afficherStocks();
+            afficherVentes();
+            remplirOptionsProduits('produit-vente-0'); // Remplir la première sélection de produits
+        }
+
+
+
+        const validUsername = "87292281";
+    const validPassword = "123456789";
+
+    // Gestion de la connexion
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const errorMessage = document.getElementById("login-error");
+
+        if (username === validUsername && password === validPassword) {
+            document.getElementById("login-page").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
+        } else {
+            errorMessage.textContent = "Identifiant ou mot de passe incorrect.";
+        }
+    });
+
+    // Fonction de déconnexion
+    function logout() {
+        document.getElementById("main-content").style.display = "none";
+        document.getElementById("login-page").style.display = "flex";
+        document.getElementById("login-form").reset(); // Réinitialise le formulaire de connexion
+    }
+    </script>
+
+</body>
+</html>
